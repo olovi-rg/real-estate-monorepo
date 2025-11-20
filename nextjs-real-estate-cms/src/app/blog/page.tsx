@@ -21,7 +21,12 @@ const POSTS_QUERY = `*[
 }`
 
 export default async function BlogPage() {
-  const posts = await client.fetch<Post[]>(POSTS_QUERY)
+  // Ensure always fresh data—no cache!
+  const posts = await client.fetch<Post[]>(
+    POSTS_QUERY,
+    {},
+    { next: { revalidate: 0 } } // <-- Disables caching
+  )
 
   return (
     <main className="container mx-auto px-4 py-40">
