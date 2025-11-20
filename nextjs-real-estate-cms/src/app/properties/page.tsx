@@ -20,7 +20,12 @@ export default async function PropertiesPage({ searchParams }: { searchParams?: 
     _id, title, slug, price, propertyType, status, location, bedrooms, bathrooms, area, images, description, publishedAt
   }`;
 
-  const properties = await client.fetch<Property[]>(PROPERTIES_QUERY);
+  // ALWAYS fetch latest from Sanity
+  const properties = await client.fetch<Property[]>(
+    PROPERTIES_QUERY,
+    {},
+    { next: { revalidate: 0 } }  // No cache: always fresh data!
+  );
 
   return (
     <main className="container mx-auto px-4 py-40">
